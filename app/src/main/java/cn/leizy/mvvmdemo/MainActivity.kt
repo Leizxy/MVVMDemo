@@ -1,22 +1,22 @@
 package cn.leizy.mvvmdemo
 
-import android.os.Bundle
 import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import kotlinx.android.synthetic.main.activity_main.*
+import cn.leizy.base.v.BaseMVVMActivity
+import cn.leizy.mvvmdemo.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseMVVMActivity<MainViewModel, ActivityMainBinding>() {
 
-    private val viewModel: MainViewModel by lazy { ViewModelProvider(this).get(MainViewModel::class.java) }
+    override fun getLayoutResId(): Int {
+        return R.layout.activity_main
+    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+    override fun initViews() {
+    }
+
+    override fun initData() {
         viewModel.apply {
             stringData.observe(this@MainActivity, {
-                test.text = it
+                vb.test.text = it
                 Log.i("MainActivity", "onCreate: $it")
             })
         }.initString()
