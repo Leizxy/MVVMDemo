@@ -3,7 +3,7 @@ package cn.leizy.base.v
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModelProvider
 import cn.leizy.base.vm.BaseViewModel
-import cn.leizy.base.m.BaseModel
+import cn.leizy.base.m.IModel
 import java.lang.reflect.ParameterizedType
 
 /**
@@ -11,7 +11,8 @@ import java.lang.reflect.ParameterizedType
  * @date 2020/11/16, 016
  * @description
  */
-abstract class BaseMVVMActivity<VM : BaseViewModel<out BaseModel>, VB : ViewDataBinding> : BaseActivity<VB>() {
+abstract class BaseMVVMActivity<VM : BaseViewModel<out IView, out IModel>, VB : ViewDataBinding> :
+    BaseActivity<VB>(), IView {
     protected val viewModel: VM by lazy { getVM() }
 
     @Suppress("UNCHECKED_CAST")

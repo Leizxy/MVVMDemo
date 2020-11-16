@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
  * @date 2020/11/12, 012
  * @description
  */
-class MainViewModel : BaseViewModel<Model>() {
+class MainViewModel : BaseViewModel<MainActivity,Model>() {
 
     val stringData = MutableLiveData<String>()
 

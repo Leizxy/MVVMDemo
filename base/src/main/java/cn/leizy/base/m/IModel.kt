@@ -5,5 +5,5 @@ package cn.leizy.base.m
  * @date 2020/11/16, 016
  * @description
  */
-interface BaseModel {
+interface IModel {
 }
