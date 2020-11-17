@@ -10,6 +10,6 @@ import androidx.annotation.IdRes
 interface IView {
     fun showLoading() {}
     fun hideLoading() {}
-    fun showToast(str: String){}
-    fun showToast(@IdRes idRes: Int){}
+    fun showToast(str: String)
+    fun showToast(@IdRes idRes: Int)
 }

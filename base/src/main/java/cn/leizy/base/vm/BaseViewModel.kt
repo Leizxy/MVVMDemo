@@ -20,8 +20,8 @@ open class BaseViewModel<V : IView, M : IModel> : AndroidViewModel(App.getInstan
 
     private val jobs: MutableList<Job> = mutableListOf()
 
-    protected val model: M
     protected val view: V
+    protected val model: M
 
     init {
         val pt = this.javaClass.genericSuperclass as ParameterizedType
@@ -54,7 +54,7 @@ open class BaseViewModel<V : IView, M : IModel> : AndroidViewModel(App.getInstan
         failBlock: (suspend CoroutineScope.(String?) -> Unit) = {
             launch {
                 if (showTips) {
-//                    showToast(it)
+                    showToast(it)
                 }
             }
         },
@@ -107,7 +107,7 @@ open class BaseViewModel<V : IView, M : IModel> : AndroidViewModel(App.getInstan
             } catch (e: Throwable) {
 //                Exceptions.handleException(e)
                 failBlock(e.message)
-                if (isChain) view?.hideLoading()
+                if (isChain) view.hideLoading()
                 if (showTips) showToast(e.message)
             } finally {
                 finallyBlock?.let {

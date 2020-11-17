@@ -1,8 +1,10 @@
 package cn.leizy.base.v
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -71,10 +73,11 @@ abstract class BaseActivity<VB : ViewDataBinding> : AppCompatActivity() {
     }
 
     fun toast(string: String) {
-//        ToastUtil.showToast(string = string)
+        Toast.makeText(this, string, Toast.LENGTH_SHORT).show()
     }
 
+    @SuppressLint("ResourceType")
     fun toast(@IdRes idRes: Int) {
-//        ToastUtil.showToast(resId = idRes)
+        Toast.makeText(this, idRes, Toast.LENGTH_SHORT).show()
     }
 }
