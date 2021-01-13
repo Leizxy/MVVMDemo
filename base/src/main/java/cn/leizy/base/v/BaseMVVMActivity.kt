@@ -1,6 +1,7 @@
 package cn.leizy.base.v
 
 import android.annotation.SuppressLint
+import android.os.Bundle
 import androidx.annotation.IdRes
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModelProvider
@@ -19,6 +20,11 @@ abstract class BaseMVVMActivity<VM : BaseViewModel<out IView, out IModel>, VB : 
         val pt = this.javaClass.genericSuperclass as ParameterizedType
         val clazz: Class<VM> = pt.actualTypeArguments[0] as Class<VM>
         ViewModelProvider(this).get(clazz)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        viewModel.bindView(this)
+        super.onCreate(savedInstanceState)
     }
 
     override fun onDestroy() {

@@ -20,15 +20,19 @@ open class BaseViewModel<V : IView, M : IModel> : AndroidViewModel(App.getInstan
 
     private val jobs: MutableList<Job> = mutableListOf()
 
-    protected val view: V
+    protected lateinit var view: V
     protected val model: M
 
     init {
         val pt = this.javaClass.genericSuperclass as ParameterizedType
-        val clazzV: Class<V> = pt.actualTypeArguments[0] as Class<V>
+//        val clazzV: Class<V> = pt.actualTypeArguments[0] as Class<V>
         val clazzM: Class<M> = pt.actualTypeArguments[1] as Class<M>
-        view = clazzV.newInstance()
+//        view = clazzV.newInstance()
         model = clazzM.newInstance()
+    }
+
+    fun bindView(view: IView) {
+        this.view = view as V
     }
 
     protected fun showToast(str: String?) {
@@ -49,18 +53,18 @@ open class BaseViewModel<V : IView, M : IModel> : AndroidViewModel(App.getInstan
      * @param isChain 链式调用（为了防止链式调用时暂时别dismiss loading）
      */
     protected fun <T> launchRequest(
-        tryBlock: suspend CoroutineScope.() -> BaseResponse<T>?,
-        successBlock: suspend CoroutineScope.(T?) -> Unit,
-        failBlock: (suspend CoroutineScope.(String?) -> Unit) = {
-            launch {
-                if (showTips) {
-                    showToast(it)
+            tryBlock: suspend CoroutineScope.() -> BaseResponse<T>?,
+            successBlock: suspend CoroutineScope.(T?) -> Unit,
+            failBlock: (suspend CoroutineScope.(String?) -> Unit) = {
+                launch {
+                    if (showTips) {
+                        showToast(it)
+                    }
                 }
-            }
-        },
-        finallyBlock: (suspend CoroutineScope.() -> Unit)? = null,
-        isChain: Boolean = false,
-        showTips: Boolean = true
+            },
+            finallyBlock: (suspend CoroutineScope.() -> Unit)? = null,
+            isChain: Boolean = false,
+            showTips: Boolean = true
     ) {
         if (showTips) {
             view.showLoading()
@@ -71,13 +75,13 @@ open class BaseViewModel<V : IView, M : IModel> : AndroidViewModel(App.getInstan
     }
 
     fun launchMain(block: suspend CoroutineScope.() -> Unit) =
-        addJob(viewModelScope.launch(Dispatchers.Main, block = block))
+            addJob(viewModelScope.launch(Dispatchers.Main, block = block))
 
     fun launchOnIO(block: suspend CoroutineScope.() -> Unit) =
-        addJob(viewModelScope.launch(Dispatchers.IO) { block() })
+            addJob(viewModelScope.launch(Dispatchers.IO) { block() })
 
     fun launchOnDefault(block: suspend CoroutineScope.() -> Unit) =
-        addJob(viewModelScope.launch(Dispatchers.Default) { block() })
+            addJob(viewModelScope.launch(Dispatchers.Default) { block() })
 
     /**
      * @param tryBlock 传入请求的代码块
@@ -87,12 +91,12 @@ open class BaseViewModel<V : IView, M : IModel> : AndroidViewModel(App.getInstan
      * @param isChain 链式调用（为了防止链式调用时暂时别dismiss loading）
      */
     private suspend fun <T> tryCatch(
-        tryBlock: suspend CoroutineScope.() -> BaseResponse<T>?,
-        successBlock: suspend CoroutineScope.(T?) -> Unit,
-        failBlock: suspend CoroutineScope.(String?) -> Unit,
-        finallyBlock: (suspend CoroutineScope.() -> Unit)? = null,
-        isChain: Boolean,
-        showTips: Boolean
+            tryBlock: suspend CoroutineScope.() -> BaseResponse<T>?,
+            successBlock: suspend CoroutineScope.(T?) -> Unit,
+            failBlock: suspend CoroutineScope.(String?) -> Unit,
+            finallyBlock: (suspend CoroutineScope.() -> Unit)? = null,
+            isChain: Boolean,
+            showTips: Boolean
     ) {
         coroutineScope {
             try {
@@ -121,9 +125,9 @@ open class BaseViewModel<V : IView, M : IModel> : AndroidViewModel(App.getInstan
     }
 
     private suspend fun <T> callResponse(
-        response: BaseResponse<T>?,
-        successBlock: suspend CoroutineScope.() -> Unit,
-        failBlock: suspend CoroutineScope.() -> Unit
+            response: BaseResponse<T>?,
+            successBlock: suspend CoroutineScope.() -> Unit,
+            failBlock: suspend CoroutineScope.() -> Unit
     ) {
         coroutineScope {
             when {
