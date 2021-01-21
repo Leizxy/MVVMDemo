@@ -1,5 +1,8 @@
 package cn.leizy.base
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -13,5 +16,9 @@ class ExampleUnitTest {
     @Test
     fun addition_isCorrect() {
         assertEquals(4, 2 + 2)
+
+        CoroutineScope(Dispatchers.IO).launch(Dispatchers.Main) {
+
+        }
     }
 }

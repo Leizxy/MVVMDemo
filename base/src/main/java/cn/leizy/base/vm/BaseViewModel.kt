@@ -9,6 +9,7 @@ import cn.leizy.base.m.IModel
 import cn.leizy.base.v.IView
 import cn.leizy.bean.BaseResponse
 import kotlinx.coroutines.*
+import java.lang.ref.WeakReference
 import java.lang.reflect.ParameterizedType
 
 /**
@@ -19,20 +20,19 @@ import java.lang.reflect.ParameterizedType
 open class BaseViewModel<V : IView, M : IModel> : AndroidViewModel(App.getInstance()), IViewModel {
 
     private val jobs: MutableList<Job> = mutableListOf()
-
+    private lateinit var weakReference:WeakReference<V>
     protected lateinit var view: V
     protected val model: M
 
     init {
         val pt = this.javaClass.genericSuperclass as ParameterizedType
-//        val clazzV: Class<V> = pt.actualTypeArguments[0] as Class<V>
         val clazzM: Class<M> = pt.actualTypeArguments[1] as Class<M>
-//        view = clazzV.newInstance()
         model = clazzM.newInstance()
     }
 
-    fun bindView(view: IView) {
-        this.view = view as V
+    fun bindView(view: V) {
+        weakReference = WeakReference(view)
+        this.view = weakReference.get()!!
     }
 
     protected fun showToast(str: String?) {
